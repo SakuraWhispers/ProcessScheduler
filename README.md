@@ -2,7 +2,7 @@
 
 The proposed Adaptive Round Robin (ARR) scheduler has been designed to demonstrate dynamic quantum computation using a priority-weighted scheduling strategy. While the implementation successfully performs CPU scheduling and computes the standard scheduling metrics, several limitations remain that will be addressed in future versions.
 
-1 Scalability of Arrival Handling
+1. Scalability of Arrival Handling
 
 The current implementation repeatedly scans the complete process list to identify newly arrived processes during each scheduling cycle.
 
@@ -15,7 +15,7 @@ Execution time increases considerably as the number of processes grows (for exam
 Future Improvement:
 Implement an event-driven arrival mechanism using a moving arrival pointer so that each process is examined only once.
 
-2 Dynamic Quantum Computation Overhead
+2. Dynamic Quantum Computation Overhead
 
 The adaptive time quantum is recalculated before every scheduling decision by iterating through the entire ready queue.
 
@@ -28,7 +28,7 @@ The computational cost grows with the size of the ready queue, especially for la
 Future Improvement:
 Introduce quantum caching so that recalculation occurs only when the ready queue changes due to process arrival or completion.
 
-3 Console Debug Output
+3. Console Debug Output
 
 During development, the scheduler prints every dynamically computed quantum value.
 
@@ -41,7 +41,7 @@ Extensive debug printing considerably increases execution time for large schedul
 Future Improvement:
 Replace direct console printing with configurable logging levels, allowing detailed debugging information to be enabled or disabled as required.
 
-4 Visualization of Large Workloads
+4. Visualization of Large Workloads
 
 The scheduler generates detailed Gantt charts and performance graphs for every execution.
 
@@ -54,7 +54,7 @@ Visualization becomes the dominant contributor to execution time for very large 
 Future Improvement:
 Automatically disable detailed visualization beyond a configurable process threshold and instead generate summarized performance graphs.
 
-5 Execution Trace Storage
+5. Execution Trace Storage
 
 Every CPU allocation is stored for later Gantt chart generation.
 
@@ -67,7 +67,7 @@ Although memory usage remains manageable, storing every execution interval incre
 Future Improvement:
 Provide optional trace compression or selective trace recording modes.
 
-6 Current Optimization Strategy
+6. Current Optimization Strategy
 
 The scheduler currently emphasizes scheduling quality over computational efficiency.
 
@@ -80,5 +80,8 @@ Large-scale workloads may require significantly longer execution times compared 
 Future Improvement:
 Introduce additional algorithmic optimizations while preserving the adaptive scheduling policy.
 
+7. Time complexity
+
+The current Adaptive Round Robin (ARR) scheduler has been primarily developed to validate the scheduling logic and dynamic quantum computation. As a result, the present implementation prioritizes correctness and extensibility over execution efficiency. performative changes will be done on further reviews as and when done.
 
 # NOTE:- current limitations are based on testing on a sample size of 30,000 processes (can be found in the datsets folder). 
