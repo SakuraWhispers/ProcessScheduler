@@ -268,8 +268,8 @@ print(
 
 print(f"CPU Utilization : {cpu_utilization:.2f}%")
 
-#print(gantt)
+print(gantt)
 
-#plot_gantt(gantt)
+plot_gantt(gantt)
 
-#plot_metrics(processes)
+plot_metrics(processes)
