@@ -69,12 +69,30 @@ def adaptive_rr(processes):
     in_queue = [False] * n
     gantt = []
 
-    busy_time = 0 #add
+    benchmark = {
+        #cpu data
+        "busy_time": 0,
+        "idle_time": 0,
 
-    q_history = [] #add
+        #.......Scheduler statistics.......
+        "context_switches": 0,
+        "scheduler_cycles": 0,
 
-    quantum_updates = 0 #add
+        #.......quantum statistics....
+        "q_history": [],
+        "quantum_updates": 0,
 
+        # ---------- Timing ----------
+        "execution_time": 0.0,
+        "time": 0,
+
+        # ---------- Reserved for Future(hopefully) ----------
+        "memory_usage": 0,
+        "throughput": 0,
+        "cpu_utilization": 0
+    } #variables used for benchmarking being placed as dictionart type 
+      #later migrate to a class based or function based system, prelim test now
+   
     print(f"Time={time}, Queue={list(ready_queue)}, Completed={completed}")
 
     # Adding first process
@@ -99,8 +117,8 @@ def adaptive_rr(processes):
         print("quanta value\n", q)
         if q == 0:
             q = processes[idx].rt
-            q_history.append(q)
-            quantum_updates += 1
+            benchmark["q_history"].append(q)
+            benchmark["quantum_updates"] += 1
 
         exec_time = min(q, processes[idx].rt)
 
@@ -112,9 +130,9 @@ def adaptive_rr(processes):
         # Gantt entry
         gantt.append((f"P{processes[idx].pid}", time, time + exec_time))
 
-        busy_time += exec_time #add
+        benchmark["busy_time"] += exec_time #add
 
-        time += exec_time
+        
         processes[idx].rt -= exec_time
 
         # Adding newly arrived processes
@@ -131,7 +149,7 @@ def adaptive_rr(processes):
             completed += 1
     
 
-    return gantt, busy_time, q_history, quantum_updates #modified
+    return gantt, benchmark #modified 2
 
 def calculate_metrics(processes):
     total_wt, total_tat = 0, 0
@@ -221,7 +239,7 @@ else:
 
 scheduler_start = time.perf_counter() #addition
     
-gantt, busy_time, q_history, quantum_updates = adaptive_rr(processes)#add
+gantt, benchmark = adaptive_rr(processes)#add
 
 scheduler_end = time.perf_counter() #add start
 
@@ -231,18 +249,27 @@ calculate_metrics(processes)
 
 total_time = max(p.ct for p in processes)
 
-cpu_utilization = (busy_time / total_time) * 100
+cpu_utilization = (benchmark["busy_time"] / total_time) * 100
 
-print(f"Average Quantum : {sum(q_history)/len(q_history):.2f}")#add
-print(f"Minimum Quantum : {min(q_history)}")#add
-print(f"Maximum Quantum : {max(q_history)}")#add
-print(f"Quantum Recalculations : {quantum_updates}")#add
+print(
+    f"Average Quantum : "
+    f"{sum(benchmark['q_history']) / len(benchmark['q_history']):.2f}"
+)#modification
+
+print(f"Minimum Quantum : {min(benchmark['q_history'])}")#modifiation
+
+print(f"Maximum Quantum : {max(benchmark['q_history'])}")#modification
+
+print(
+    f"Quantum Recalculations : "
+    f"{benchmark['quantum_updates']}"
+)#modification
 
 
 print(f"CPU Utilization : {cpu_utilization:.2f}%")
 
-print(gantt)
+#print(gantt)
 
-plot_gantt(gantt)
+#plot_gantt(gantt)
 
-plot_metrics(processes)
+#plot_metrics(processes)
